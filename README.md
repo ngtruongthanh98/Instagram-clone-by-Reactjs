@@ -379,3 +379,45 @@ Make border for .post
 ```
 
 ![Add border](https://i.imgur.com/oRieYie.png)
+
+Draw border for post__image:
+```
+.post__image {
+    width: 100%;
+    object-fit: contain;
+    border-top: 1px solid lightgray;
+    border-bottom: 1px solid lightgray;
+}
+```
+![post__image border](https://i.imgur.com/ljrH1Oy.png)
+
+Now we try to create more posts:
+
+In App.js:
+```
+            <h1>Let's build the Instagram clone</h1>
+
+			<Post/>
+			<Post/>
+			<Post/>
+```
+
+In our web app:
+
+![Posts](https://i.imgur.com/HLP0rNT.png)
+
+Let's see the real Instagram:
+
+![Posts In Real Instagram](https://i.imgur.com/qIuyVMI.png)
+
+We make a margin-bottom
+
+```
+.post {
+    background-color:white;
+    max-width: 500px;
+    border: 1px solid lightgray;
+    margin-bottom: 45px;
+}
+```
+
