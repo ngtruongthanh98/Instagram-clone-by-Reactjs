@@ -100,9 +100,9 @@ You can get style Instagram word via copy image address of the official Instagra
 
 ![copy image address](https://i.imgur.com/e16tauc.png)
 
-____________________________________________________
-App header:
+---
 
+App header:
 
 In App.js:
 
@@ -122,6 +122,7 @@ In App.js:
 ```
 
 In App.css:
+
 ```
 * {
   margin: 0;
@@ -141,7 +142,7 @@ In App.css:
 
 ![Web app](https://i.imgur.com/swM7zWT.png)
 
-Add border-bottom to app__header:
+Add border-bottom to app\_\_header:
 
 ```
 .app__header {
@@ -151,7 +152,230 @@ Add border-bottom to app__header:
   object-fit: contain;
 }
 ```
+
 ![border-bottom](https://i.imgur.com/ZjyThXD.png)
 
-_____________________________________________
+---
+
 Post
+
+In src folder, create folder components. Inside the components folder, create folder Post. In the Post folder, we create Post.js and Post.css
+
+Here is a post:
+
+![An Instagram post](https://i.imgur.com/dcQEp4T.png)
+
+As you can see, every post has a header (avatar + username), an image of post, and a big caption (username + caption)
+
+In Post.js
+
+```
+import React, { PureComponent } from 'react'
+
+export class Post extends PureComponent {
+    render() {
+        return (
+            <div>
+                <h3>Instagram Post</h3>
+                {/* header --> avatar + username */}
+
+                {/* image */}
+
+                {/* username + caption */}
+            </div>
+        )
+    }
+}
+
+export default Post
+```
+
+Remember to import component Post to App.js
+
+```
+import Post from "./components/Post/Post"
+```
+
+Call the Post component:
+
+```<Post/>
+
+```
+
+![Import Post component](https://i.imgur.com/ui7A8fq.png)
+
+Try to sketch the layout:
+
+In Post.js:
+
+![Post.js](https://i.imgur.com/PfG2Sfm.png)
+
+![Post.js](https://i.imgur.com/SM6QjuW.png)
+
+Next, I want to scale the image, so I create a className="post\_\_image" in Post.css
+
+For the <div> of Post component, I create className="post"
+
+```
+            <div className="post">
+                {/* header --> avatar + username */}
+                <h3>Username</h3>
+
+                {/* image */}
+
+                <img src="https://i.imgur.com/rzjFZAv.png" className="post__image" alt="Image"/>
+
+
+                {/* username + caption */}
+                <h4>Username: caption</h4>
+            </div>
+```
+
+Remember to add this line at the beginning of Post.js: ```import "../Post/Post.css"```
+
+In Post.css
+```
+.post__image {
+    width: 100%;
+    object-fit: contain;
+}
+```
+The image will have a full width, noted that: `If we use object-fit: contain; the image keeps its aspect ratio, but is resized to fit within the given dimension:`
+
+Now we edit Username + Caption, the Username should be bold, the remain part (caption) is normal.
+```<h4 className="post__text"><strong>Username </strong>Here is a caption</h4>```
+
+![Username and Caption](https://i.imgur.com/5Qie4oY.png)
+
+```
+.post__text {
+    font-weight: normal;
+}
+```
+
+For Avatar, We use Material UI. Go to this page: `https://material-ui.com/`
+Install it: `npm install @material-ui/core`
+
+Import Avatar for Material UI to the beginning of Post.js:
+```import Avatar from "@material-ui/core/Avatar";```
+
+With the post header:
+```
+                {/* header --> avatar + username */}
+                <Avatar
+                    className="post__avatar"
+                    alt="drazennguyen"
+                    src="https://i.imgur.com/OH8NKgs.png"
+                />
+
+                <h3>Username</h3>
+```
+
+The avatar is added: 
+
+![Avatar added](https://i.imgur.com/sN5soYa.png)
+
+Now, we need to create className="post__header" to cover both avatar and username
+```
+                {/* header --> avatar + username */}
+                <div className="post__header">
+                    <Avatar
+                        className="post__avatar"
+                        alt="drazennguyen"
+                        src="https://i.imgur.com/OH8NKgs.png"
+                    />
+
+                    <h3>Username</h3>
+                </div>
+```
+
+With Post.css:
+```
+.post__header {
+    display: flex;
+}
+```
+
+For `display: flex` display items in a row.
+
+![display flex](https://i.imgur.com/KTYSdeI.png)
+
+```
+.post__header {
+    display: flex;
+    align-items: center;
+}
+```
+
+To move text to the middle
+
+![align-item center](https://i.imgur.com/mST2Zlw.png)
+
+```
+.post__avatar {
+    margin-right: 10px;
+}
+```
+
+Between Avatar and Username have a distance:
+
+![margin-right](https://i.imgur.com/1MzIl25.png)
+
+```
+.post__header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+```
+
+I make a padding for post__header, it will not touch the post__image
+
+![padding](https://i.imgur.com/FxBwTmX.png)
+
+I change other avatar picture to see it clear:
+
+![New avatar](https://i.imgur.com/b882j7a.png)
+
+We will make padding for post__text by 20px
+
+![Before padding](https://i.imgur.com/cWdRgUb.png)
+
+```
+.post__text {
+    font-weight: normal;
+    padding: 20px;
+}
+```
+
+![After padding](https://i.imgur.com/1O474Ij.png)
+
+The post must be fixed in a constant size.
+
+```
+.post {
+    max-width: 500px;
+}
+```
+
+![Fixed width post](https://i.imgur.com/aVMmk6o.png)
+
+Change the background-color:
+
+```
+.post {
+    background-color:white;
+    max-width: 500px;
+}
+```
+
+Make border for .post
+```
+.post {
+    background-color:white;
+    max-width: 500px;
+    border: 1px solid lightgray;
+}
+```
+
+![Add border](https://i.imgur.com/oRieYie.png)

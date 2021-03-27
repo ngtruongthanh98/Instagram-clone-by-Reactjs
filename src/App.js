@@ -1,4 +1,5 @@
 import "./App.css";
+import Post from "./components/Post/Post"
 
 function App() {
     return (
@@ -12,6 +13,8 @@ function App() {
 			</div>
 			
             <h1>Let's build the Instagram clone</h1>
+
+			<Post/>
 
         </div>
     );
