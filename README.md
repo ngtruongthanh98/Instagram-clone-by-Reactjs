@@ -420,4 +420,141 @@ We make a margin-bottom
     margin-bottom: 45px;
 }
 ```
+After that, we have a result:
+![After margin](https://i.imgur.com/EP4lLXK.png)
+
+________________________________________________
+
+Transfer data to a post component:
+
+I change class component to functional component in Post.js. Because functional component can get data (username, caption, imageURL) from Props.
+
+```
+import React from "react";
+import "../Post/Post.css";
+import Avatar from "@material-ui/core/Avatar";
+
+function Post({username, caption, imageURL}) {
+    return (
+        <div className="post">
+            {/* header --> avatar + username */}
+            <div className="post__header">
+                <Avatar
+                    className="post__avatar"
+                    alt="drazennguyen"
+                    src="https://i.imgur.com/DYaxbkt.png"
+                />
+
+                <h3>Username</h3>
+            </div>
+
+            {/* image */}
+            <img
+                src="https://i.imgur.com/rzjFZAv.png"
+                className="post__image"
+                alt="Image"
+            />
+
+            {/* username + caption */}
+            <h4 className="post__text">
+                <strong>Username </strong>Here is a caption
+            </h4>
+        </div>
+    );
+}
+
+export default Post;
+
+```
+
+In App.js, I give props to a post:
+```
+    <Post username="drazennguyen" caption="Hello Instagram" imageURL="https://i.imgur.com/C9sPKrS.png"/>
+
+```
+
+In Post.js:
+
+```
+function Post({username, caption, imageURL}) {
+    return (
+        <div className="post">
+            {/* header --> avatar + username */}
+            <div className="post__header">
+                <Avatar
+                    className="post__avatar"
+                    alt="drazennguyen"
+                    src="https://i.imgur.com/DYaxbkt.png"
+                />
+
+                <h3>{username}</h3>
+            </div>
+
+            {/* image */}
+            <img
+                src={imageURL}
+                className="post__image"
+                alt="Image"
+            />
+
+            {/* username + caption */}
+            <h4 className="post__text">
+                <strong>{username} </strong>{caption}
+            </h4>
+        </div>
+    );
+}
+```
+
+![props data](https://i.imgur.com/XDC1hVZ.png)
+
+Create more posts:
+
+```
+			<Post username="drazennguyen" caption="Hello Instagram" imageURL="https://i.imgur.com/C9sPKrS.png"/>
+			<Post username="drazennguyen" caption="Viva Espana" imageURL="https://i.imgur.com/rzjFZAv.png"/>
+			<Post username="drazennguyen" caption="Natural and fresh" imageURL="https://i.imgur.com/526tuSE.png"/>
+```
+_________________________________________________
+
+In App.js, use useState
+
+```import React, {useState} from "react";```
+
+```	const [posts, setPosts] = useState([]);```
+
+Now, create a data array including data of posts:
+
+```
+	const [posts, setPosts] = useState([
+		{
+			username: "drazennguyen",
+			caption: "Hello Instagram",
+			imageURL: "https://i.imgur.com/C9sPKrS.png"
+		},
+
+		{
+			username: "drazennguyen", 
+			caption: "Viva Espana", 
+			imageURL: "https://i.imgur.com/rzjFZAv.png"
+		},
+
+		{
+			username: "drazennguyen", 
+			caption: "Natural and fresh", 
+			imageURL: "https://i.imgur.com/526tuSE.png"
+		}
+
+	]);
+```
+
+We call those data to ```<Post/>```
+
+```
+			{
+				posts.map(post => (
+					<Post username={post.username} caption={post.caption} imageURL={post.imageURL}/>
+				))
+			}
+```
 
