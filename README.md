@@ -421,6 +421,7 @@ We make a margin-bottom
 }
 ```
 After that, we have a result:
+
 ![After margin](https://i.imgur.com/EP4lLXK.png)
 
 ________________________________________________
@@ -558,3 +559,22 @@ We call those data to ```<Post/>```
 			}
 ```
 
+______________________________________
+
+Create database in Firebase
+
+![Firebase](https://i.imgur.com/oDYhP3q.png)
+
+![Create database](https://i.imgur.com/6QSLd8Y.png)
+
+I choose Test mode
+
+![Test mode](https://i.imgur.com/pJ0NxqK.png)
+
+Because I am in Vietnam, I choose server South Asia
+
+![Server](https://i.imgur.com/hSFx4f6.png)
+
+![Firebase](https://i.imgur.com/YztNsIA.png)
+
+![Firebase](https://i.imgur.com/2TH9pX3.png)
