@@ -20,7 +20,7 @@ function Post({username, caption, imageURL}) {
             <img
                 src={imageURL}
                 className="post__image"
-                alt="Image"
+                alt=""
             />
 
             {/* username + caption */}
