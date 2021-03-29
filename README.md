@@ -578,3 +578,60 @@ Because I am in Vietnam, I choose server South Asia
 ![Firebase](https://i.imgur.com/YztNsIA.png)
 
 ![Firebase](https://i.imgur.com/2TH9pX3.png)
+
+Press `Start collection`
+
+Create a collection name `posts`:
+
+![collection](https://i.imgur.com/d5y1mc3.png)
+
+Give these form data, click `Audo-ID`, then `Save`
+
+![Form](https://i.imgur.com/qRuL6lA.png)
+
+posts: many posts
+Each document is a post
+In a post has caption, imageURL, username...
+
+![After add data](https://i.imgur.com/qdiNK88.png)\
+
+![Connect Firecbase](https://i.imgur.com/uIjHu0u.png)
+
+Click the setting icon -> Project settings
+
+Scroll down to `Your apps`
+
+![Firebase config](https://i.imgur.com/d01GIWI.png)
+
+Select `Config`:
+
+![Firebase config](https://i.imgur.com/fPU7vyh.png)
+
+In `src`, create a file `firebase.js`
+
+`npm i firebase`
+
+In `firebase.js`, write ```import firebase from "firebase";``` to the top.
+
+```
+const firebaseApp = firebase.initializeApp({
+
+});
+
+const db = firebaseApp.firestore();
+const auth = firebase.auth();
+const storage = firebase.storage();
+
+export { db, auth, storage };
+```
+
+![Firebase connection](https://i.imgur.com/R9vYdND.png)
+
+In 
+```const firebaseApp = firebase.initializeApp({
+
+});
+```
+
+Copy config from Firebase into it
+
