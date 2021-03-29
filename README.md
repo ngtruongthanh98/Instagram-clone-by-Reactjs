@@ -628,10 +628,53 @@ export { db, auth, storage };
 ![Firebase connection](https://i.imgur.com/R9vYdND.png)
 
 In 
-```const firebaseApp = firebase.initializeApp({
+```
+const firebaseApp = firebase.initializeApp({
 
 });
 ```
 
 Copy config from Firebase into it
 
+__________________________________________
+Go back to App.js
+
+We will use `useEffect`. "useEffect": run a piece of code based on a specific condition.
+
+Add useEffect to import
+
+```import React, {useState, useEffect} from "react";```
+
+useEffect(() => {
+    // this is where the code run
+}, [ // condition ]);
+
+I want the code run everytime a comment happens
+
+In App.js, ```import { db } from "./firebase";```
+
+```
+	useEffect(() => {
+		// this is where the code run
+		db.collection('posts').onSnapshot(snapshot => {
+			// everytime a new post is added, this code firebase updated
+			setPosts(snapshot.docs.map(doc => doc.data()));
+		})
+	}, []);
+```
+
+Change code into this:
+
+```
+	const [posts, setPosts] = useState([]);
+
+	useEffect(() => {
+		// this is where the code run
+		db.collection('posts').onSnapshot(snapshot => {
+			// everytime a new post is added, this code firebase updated
+			setPosts(snapshot.docs.map(doc => doc.data()));
+		})
+	}, []);
+```
+
+Then project can load data from Firebase

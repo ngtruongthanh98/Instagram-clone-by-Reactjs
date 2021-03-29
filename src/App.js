@@ -1,28 +1,18 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import "./App.css";
 import Post from "./components/Post/Post"
+import { db } from "./firebase";
 
 function App() {
-	const [posts, setPosts] = useState([
-		{
-			username: "drazennguyen",
-			caption: "Hello Instagram",
-			imageURL: "https://i.imgur.com/C9sPKrS.png"
-		},
+	const [posts, setPosts] = useState([]);
 
-		{
-			username: "drazennguyen", 
-			caption: "Viva Espana", 
-			imageURL: "https://i.imgur.com/rzjFZAv.png"
-		},
-
-		{
-			username: "drazennguyen", 
-			caption: "Natural and fresh", 
-			imageURL: "https://i.imgur.com/526tuSE.png"
-		}
-
-	]);
+	useEffect(() => {
+		// this is where the code run
+		db.collection('posts').onSnapshot(snapshot => {
+			// everytime a new post is added, this code firebase updated
+			setPosts(snapshot.docs.map(doc => doc.data()));
+		})
+	}, []);
 
     return (
         <div className="App">			
