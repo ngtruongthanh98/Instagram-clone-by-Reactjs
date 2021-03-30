@@ -678,3 +678,323 @@ Change code into this:
 ```
 
 Then project can load data from Firebase
+
+Add doc.id:
+```
+	useEffect(() => {
+		// this is where the code run
+		db.collection('posts').onSnapshot(snapshot => {
+			// everytime a new post is added, this code firebase updated
+			setPosts(snapshot.docs.map(doc => ({
+				id: doc.id,				
+				post: doc.data()
+			})));
+		})
+	}, []);
+```
+
+```
+			{
+				posts.map(({id, post}) => (
+					<Post key={id} username={post.username} caption={post.caption} imageURL={post.imageURL}/>
+				))
+			}
+```
+______________________________________
+
+Now we go to Authentication in Firebase
+
+![Auth](https://i.imgur.com/lM8dmf5.png)
+
+![Auth](https://i.imgur.com/KgWnGO0.png)
+
+You have many choices to sign in your project:
+
+![Sign-in](https://i.imgur.com/0ez4WiO.png)
+
+Enable Email, and Save
+
+![Email](https://i.imgur.com/tHahR7o.png)
+
+![Email](https://i.imgur.com/WZWluR3.png)
+
+I use Modal in MaterialUI: `https://material-ui.com/components/modal/#simple-modal`
+
+In App.js: 
+
+```
+import { Modal } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+```
+
+Before function App():
+```
+function getModalStyle() {
+	const top = 50;
+	const left = 50;
+
+	return {
+		top: `${top}%`,
+		left: `${left}%`,
+		transfrom: `translate(-${top}%, -${left}%)`,
+	}
+}
+
+const useStyles = makeStyles((theme) => ({
+	paper: {
+		position: 'absolute',
+		width: 400,
+		backgroundColor: theme.palette.background.paper,
+		border: '2px solid #000',
+		boxShadow: theme.shadows[5],
+		padding: theme.spacing(2, 4, 3),
+	},
+}));
+```
+
+in App():
+```
+	const classes = useStyles();
+	const [modalStyle] = useState(getModalStyle);
+
+    const [posts, setPosts] = useState([]);
+	const [open, setOpen] = useState(false);
+
+```
+
+```
+            <Modal
+                open={open}
+                onClose={() => setOpen(false)}
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-model-description"
+            >
+                <div style={modalStyle} className={classes.paper}>
+                    <h2>I am a Modal</h2>
+                </div>
+            </Modal>
+```
+
+Create button for Sign-up, sign-in:
+
+```
+import { Button, Modal } from "@material-ui/core";
+
+```
+
+Create button for Sign-up:
+```
+			<Button onClick={() => setOpen(true)}>Sign up</Button>
+
+```
+
+![Button](https://i.imgur.com/TjVz0I2.png)
+
+![Button](https://i.imgur.com/AOUiOX9.png)
+
+Now we customize the button `SING UP`
+
+```import { Button, Input, Modal } from "@material-ui/core";```
+
+In App():
+
+```
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+```
+
+With ```<Modal>```:
+```
+            <Modal
+                open={open}
+                onClose={() => setOpen(false)}
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-model-description"
+            >
+                <div style={modalStyle} className={classes.paper}>
+                    <form>
+                        <center>
+                            <img
+                                className="app__headerImage"
+                                src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png"
+                                alt=""
+                            />
+                        </center>
+
+                        <Input
+                            placeholder="username"
+                            type="text"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                        />
+                        <Input
+                            placeholder="email"
+                            type="text"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                        <Input
+                            placeholder="password"
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <Button onClick={signUp}>Sign Up</Button>
+                    </form>
+                </div>
+            </Modal>
+
+```
+
+![Sign Up](https://i.imgur.com/iwSzhDp.png)
+
+For ```<form>``` create ```<form className="app__signup">```
+
+Change css in App.css
+
+```
+.app__signup {
+  display: flex;
+}
+```
+
+![display flex](https://i.imgur.com/jp4EEoI.png)
+
+```
+.app__signup {
+  display: flex;
+  flex-direction: column;
+}
+```
+
+Add ```flex-direction: column;```
+
+![flex direction](https://i.imgur.com/rEz5HFz.png)
+
+```
+    const signUp = (event) => {
+        event.preventDefault();
+    };
+```
+Noted: The preventDefault() method cancels the event if it is cancelable, meaning that the default action that belongs to the event will not occur.
+
+In `<Modal>`: ```<Button type="submit" onClick={signUp}>Sign Up</Button>```
+
+In `signUp`, after ```event.preventDefault();```
+
+```
+        auth
+            .createUserWithEmailAndPassword(email, password)
+            .catch((error) => alert(error.message));
+```
+
+Check login - logout:
+```    const [user, setUser] = useState(null);```
+
+```
+    useEffect(() => {
+        auth.onAuthStateChanged((authUser) => {
+            if(authUser) {
+                // user has logged in ...
+                console.log(authUser);
+                setUser(authUser);
+            } else {
+                // user has logged out ...
+                setUser(null);
+            }
+        })
+    }, []);
+```
+
+```
+    useEffect(() => {
+        auth.onAuthStateChanged((authUser) => {
+            if(authUser) {
+                // user has logged in ...
+                console.log(authUser);
+                setUser(authUser);
+
+                if(authUser.displayName) {
+                    // dont update username
+                } else {
+                    // if we just created someone 
+                    return authUser.updateProfile({
+                        displayName: username
+                    });
+                }
+            } else {
+                // user has logged out ...
+                setUser(null);
+            }
+        })
+    }, []);
+```
+
+```
+            } else {
+                // user has logged out ...
+                setUser(null);
+            }
+        })
+    }, [user, username]);
+```
+
+Now we change this:
+```
+    useEffect(() => {
+        const unsubcribe = auth.onAuthStateChanged((authUser) => {
+            if(authUser) {
+                // user has logged in ...
+                console.log(authUser);
+                setUser(authUser);
+                
+            } else {
+                // user has logged out ...
+                setUser(null);
+            }
+        })
+
+        return () => {
+            // perform some cleanup actions
+            unsubcribe();
+        }
+    }, [user, username]);
+```
+
+and in `signUp()`:
+
+```
+    const signUp = (event) => {
+        event.preventDefault();
+
+        auth
+            .createUserWithEmailAndPassword(email, password)
+            .then((authUser) => {
+                return authUser.user.updateProfile({
+                    displayName: username
+                })
+            })
+            .catch((error) => alert(error.message));
+    };
+```
+
+LogOut:
+
+```
+            {user ? (
+                <Button onClick={() => auth.signOut()}>Logout</Button>
+            ) : (
+                <Button onClick={() => setOpen(true)}>Sign Up</Button>
+            )}
+```
+
+Let's sign up new user:
+
+![sign up](https://i.imgur.com/LcIfCq4.png)
+
+![sign up](https://i.imgur.com/M5N25YO.png)
+
+After sign up, your account automatically login, so the signup button change to logout button
+
+![logout](https://i.imgur.com/pxvQMo6.png)
