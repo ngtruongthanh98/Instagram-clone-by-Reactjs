@@ -976,6 +976,9 @@ and in `signUp()`:
                 })
             })
             .catch((error) => alert(error.message));
+
+        setOpen(false);
+
     };
 ```
 
@@ -998,3 +1001,75 @@ Let's sign up new user:
 After sign up, your account automatically login, so the signup button change to logout button
 
 ![logout](https://i.imgur.com/pxvQMo6.png)
+
+Create button `Sign In`
+
+```
+            {user ? (
+                <Button onClick={() => auth.signOut()}>Logout</Button>
+            ) : (
+                <div className="app__loginContainer">
+                    <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
+                    <Button onClick={() => setOpen(true)}>Sign Up</Button>
+                </div>
+            )}
+```
+```
+    const [openSignIn, setOpenSignIn] = useState(false);
+
+```
+
+Create Modal for Sign In
+
+```
+            <Modal
+                open={openSignIn}
+                onClose={() => setOpenSignIn(false)}
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-model-description"
+            >
+                <div style={modalStyle} className={classes.paper}>
+                    <form className="app__signup">
+                        <center>
+                            <img
+                                className="app__headerImage"
+                                src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png"
+                                alt=""
+                            />
+                        </center>
+
+                        <Input
+                            placeholder="email"
+                            type="text"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                        <Input
+                            placeholder="password"
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <Button type="submit" onClick={signIn}>
+                            Sign In
+                        </Button>
+                    </form>
+                </div>
+            </Modal>
+```
+
+signIn function:
+
+```
+    const signIn = (event) => {
+        event.preventDefault();
+        
+        auth
+            .signInWithEmailAndPassword(email, password)
+            .catch((error) => alert(error.message));
+
+        setOpenSignIn(false);
+    }
+```
+
+Now we can sign in, sign up and logout
