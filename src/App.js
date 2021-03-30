@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import Post from "./components/Post/Post";
 import { auth, db } from "./firebase";
-import ImageUpload from "./ImageUpload";
+import ImageUpload from "./components/ImageUpload/ImageUpload";
 
 function getModalStyle() {
     const top = 60;
@@ -60,15 +60,17 @@ function App() {
 
     useEffect(() => {
         // this is where the code run
-        db.collection("posts").orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
-            // everytime a new post is added, this code firebase updated
-            setPosts(
-                snapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    post: doc.data(),
-                }))
-            );
-        });
+        db.collection("posts")
+            .orderBy("timestamp", "desc")
+            .onSnapshot((snapshot) => {
+                // everytime a new post is added, this code firebase updated
+                setPosts(
+                    snapshot.docs.map((doc) => ({
+                        id: doc.id,
+                        post: doc.data(),
+                    }))
+                );
+            });
     }, []);
 
     const signUp = (event) => {
@@ -97,12 +99,6 @@ function App() {
 
     return (
         <div className="App">
-            {user?.displayName ? (
-                <ImageUpload username={user.displayName} />
-            ) : (
-                <h3>Sorry you need to login to upload</h3>
-            )}
-
             <Modal
                 open={open}
                 onClose={() => setOpen(false)}
@@ -185,16 +181,18 @@ function App() {
                     src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png"
                     alt=""
                 />
-            </div>
 
-            {user ? (
-                <Button onClick={() => auth.signOut()}>Logout</Button>
-            ) : (
-                <div className="app__loginContainer">
-                    <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
-                    <Button onClick={() => setOpen(true)}>Sign Up</Button>
-                </div>
-            )}
+                {user ? (
+                    <Button onClick={() => auth.signOut()}>Logout</Button>
+                ) : (
+                    <div className="app__loginContainer">
+                        <Button onClick={() => setOpenSignIn(true)}>
+                            Sign In
+                        </Button>
+                        <Button onClick={() => setOpen(true)}>Sign Up</Button>
+                    </div>
+                )}
+            </div>
 
             <h1>Let's build the Instagram clone</h1>
 
@@ -206,6 +204,12 @@ function App() {
                     imageURL={post.imageURL}
                 />
             ))}
+
+            {user?.displayName ? (
+                <ImageUpload username={user.displayName} />
+            ) : (
+                <h3>Sorry you need to login to upload</h3>
+            )}
         </div>
     );
 }

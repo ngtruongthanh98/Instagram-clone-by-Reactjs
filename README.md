@@ -1279,3 +1279,106 @@ You can use my accout to login, or just create a new one:
 email: thanhnguyen@gmail.com
 pass: 123456
 ```
+
+________________________________
+
+Styling ImageUpload.css
+
+Create ImageUpload.css
+
+In .js file:
+
+```import "./ImageUpload.css";```
+
+```
+    return (
+        <div className="imageUpload">
+            <progress value={progress} max="100"/>
+            <input
+```
+
+In .css
+
+```
+.imageUpload {
+    display: flex;
+}
+```
+
+![display flex](https://i.imgur.com/A1LxFBU.png)
+
+
+```
+.imageUpload {
+    display: flex;
+    flex-direction: column;
+}
+```
+![flex direction](https://i.imgur.com/gjOLGGw.png)
+
+```
+.imageUpload {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+```
+
+![css edit](https://i.imgur.com/7tH3rnE.png)
+
+```            
+<progress className="imageUpload__progress" value={progress} max="100"/>
+```
+
+```
+.imageUpload__progress {
+    width: 100%;
+}
+```
+
+
+
+In App.js
+
+Move Login Logout to app__heeader:
+```
+            <div className="app__header">
+                <img
+                    className="app__headerImage"
+                    src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png"
+                    alt=""
+                />
+
+                {user ? (
+                    <Button onClick={() => auth.signOut()}>Logout</Button>
+                ) : (
+                    <div className="app__loginContainer">
+                        <Button onClick={() => setOpenSignIn(true)}>
+                            Sign In
+                        </Button>
+                        <Button onClick={() => setOpen(true)}>Sign Up</Button>
+                    </div>
+                )}
+            </div>
+```
+
+In App.css
+
+```
+.app__header {
+  background-color: white;
+  padding: 20px;
+  border-bottom: 1px solid lightgray;
+  object-fit: contain;
+  display: flex;
+  justify-content: space-between;
+}
+
+.app__headerImage {
+  object-fit: contain;
+}
+```
