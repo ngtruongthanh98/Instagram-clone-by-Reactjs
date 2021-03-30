@@ -1073,3 +1073,209 @@ signIn function:
 ```
 
 Now we can sign in, sign up and logout
+
+_____________________________________
+
+I want to create an input field where user can post their image and caption.
+
+Create file `ImageUpload.js` in `src`
+
+In App.js 
+
+```import ImageUpload from "./ImageUpload";```
+
+With ImageUpload.js
+
+```
+import { Button } from "@material-ui/core";
+import React, { useState } from "react";
+
+function ImageUpload() {
+    const [image, setImage] = useState(null);
+    const [progress, setProgress] = useState(0);
+    const [caption, setCaption] = useState("");
+
+    const handleChange = (e) => {
+        if (e.target.files[0]) {
+            setImage(e.target.files[0]);
+        }
+    };
+
+    const handleUpload = () => {
+
+    }
+
+    return (
+        <div>
+            {/* I want to have ... */}
+            {/* Caption input */}
+            {/* File picker */}
+            {/* Post button */}
+
+            <input
+                type="text"
+                placeholder="Enter a caption..."
+                onChange={(event) => setCaption(event.target.value)}
+                value={""}
+            />
+            <input type="file" onChange={handleChange} />
+            <Button onClick={handleUpload}>Upload</Button>
+        </div>
+    );
+}
+
+export default ImageUpload;
+
+```
+
+In App.js
+
+```
+    return (
+        <div className="App">
+            <ImageUpload />
+```
+
+![Image Upload](https://i.imgur.com/0yGxhBt.png)
+
+In `ImageUpload.js`
+
+```
+import { storage, db } from "./firebase";
+import firebase from "firebase";
+
+```
+
+```
+    const handleUpload = () => {
+        const uploadTask = storage.ref(`images/${image.name}`).put(image);
+    
+        uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+                // progress function ...
+                const progress = Math.round(
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                );
+                setProgress(progress);
+            },
+            (error) => {
+                // Error function ...\
+                console.log(error);
+                alert(error.message);
+            },
+            () => {
+                // complete function...
+                storage
+                    .ref("images")
+                    .child(image.name)
+                    .getDownloadURL()
+                    .then(url => {
+                        // post image inside db
+                        db.collection("posts").add({
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                            caption: caption,
+                            imageURL: url,
+                            username: username
+                        })
+                    })
+            }
+        )
+    }
+```
+
+Add username to a props
+
+```
+function ImageUpload({username}) {
+    const [image, setImage] = useState(null);
+    const [progress, setProgress] = useState(0);
+    const [caption, setCaption] = useState("");
+```
+
+In App.js
+
+```
+    return (
+        <div className="App">
+            {user?.displayName ? (
+                <ImageUpload username={user.displayName} />
+            ) : (
+                <h3>Sorry you need to login to upload</h3>
+            )}
+
+            <Modal
+                open={open}
+                onClose={() => setOpen(false)}
+                aria-labelledby="simple-modal-t
+```
+
+![Upload Image](https://i.imgur.com/ccUuagM.png)
+
+In ImageUpload.js return values:
+
+```
+                storage
+                    .ref("images")
+                    .child(image.name)
+                    .getDownloadURL()
+                    .then((url) => {
+                        // post image inside db
+                        db.collection("posts").add({
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                            caption: caption,
+                            imageURL: url,
+                            username: username,
+                        });
+
+                        setProgress(0);
+                        setCaption("");
+                        setImage(null);
+                    });
+```
+
+add progress:
+
+```
+        <div>
+            {/* I want to have ... */}
+            {/* Caption input */}
+            {/* File picker */}
+            {/* Post button */}
+
+            <progress value={progress} max="100"/>
+            <input
+                type="text"
+                placeholder="Enter a caption..."
+                onChange={(event) => setCaption(event.target.value)}
+                value={caption}
+            />
+            <input type="file" onChange={handleChange} />
+            <Button onClick={handleUpload}>Upload</Button>
+        </div>
+```
+
+In App.js
+
+Order posts follow timestamp
+```
+    useEffect(() => {
+        // this is where the code run
+        db.collection("posts").orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
+            // everytime a new post is added, this code firebase updated
+            setPosts(
+                snapshot.docs.map((doc) => ({
+                    id: doc.id,
+                    post: doc.data(),
+                }))
+            );
+        });
+    }, []);
+```
+
+Note:
+You can use my accout to login, or just create a new one:
+```
+email: thanhnguyen@gmail.com
+pass: 123456
+```

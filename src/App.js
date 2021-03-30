@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import Post from "./components/Post/Post";
 import { auth, db } from "./firebase";
+import ImageUpload from "./ImageUpload";
 
 function getModalStyle() {
     const top = 60;
@@ -59,7 +60,7 @@ function App() {
 
     useEffect(() => {
         // this is where the code run
-        db.collection("posts").onSnapshot((snapshot) => {
+        db.collection("posts").orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
             // everytime a new post is added, this code firebase updated
             setPosts(
                 snapshot.docs.map((doc) => ({
@@ -86,16 +87,22 @@ function App() {
 
     const signIn = (event) => {
         event.preventDefault();
-        
-        auth
-            .signInWithEmailAndPassword(email, password)
-            .catch((error) => alert(error.message));
+
+        auth.signInWithEmailAndPassword(email, password).catch((error) =>
+            alert(error.message)
+        );
 
         setOpenSignIn(false);
-    }
+    };
 
     return (
         <div className="App">
+            {user?.displayName ? (
+                <ImageUpload username={user.displayName} />
+            ) : (
+                <h3>Sorry you need to login to upload</h3>
+            )}
+
             <Modal
                 open={open}
                 onClose={() => setOpen(false)}
