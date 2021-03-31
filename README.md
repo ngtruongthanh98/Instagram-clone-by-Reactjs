@@ -1663,3 +1663,18 @@ Add `.oderBy`
 Nơ you can post your comments:
 
 ![test comment](https://i.imgur.com/pGiqONi.png)
+
+___________________________
+
+Change css app__header
+
+```
+.app__header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+```
+
+![header app](https://i.imgur.com/HZDFACn.png)
+
+Now the header is sticked to the top of page
