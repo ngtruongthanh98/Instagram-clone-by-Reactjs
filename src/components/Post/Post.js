@@ -4,7 +4,6 @@ import Avatar from "@material-ui/core/Avatar";
 import { db } from "../../firebase";
 import firebase from "firebase";
 
-
 function Post({ postId, user, username, caption, imageURL }) {
     const [comments, setComments] = useState([]);
     const [comment, setComment] = useState("");
@@ -33,7 +32,7 @@ function Post({ postId, user, username, caption, imageURL }) {
         db.collection("posts").doc(postId).collection("comments").add({
             text: comment,
             username: user.displayName,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         });
         setComment("");
     };
@@ -68,23 +67,25 @@ function Post({ postId, user, username, caption, imageURL }) {
                 </div>
             ))}
 
-            <form className="post__commentBox">
-                <input
-                    className="post__input"
-                    type="text"
-                    placeholder="Add a comment..."
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
-                />
-                <button
-                    className="post__button"
-                    disabled={!comment}
-                    type="submit"
-                    onClick={postComment}
-                >
-                    Post
-                </button>
-            </form>
+            {user && (
+                <form className="post__commentBox">
+                    <input
+                        className="post__input"
+                        type="text"
+                        placeholder="Add a comment..."
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                    />
+                    <button
+                        className="post__button"
+                        disabled={!comment}
+                        type="submit"
+                        onClick={postComment}
+                    >
+                        Post
+                    </button>
+                </form>
+            )}
         </div>
     );
 }

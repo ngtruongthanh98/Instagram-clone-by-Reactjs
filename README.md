@@ -1678,3 +1678,37 @@ Change css app__header
 ![header app](https://i.imgur.com/HZDFACn.png)
 
 Now the header is sticked to the top of page
+
+______________________________________
+
+Only logged in user can comment:
+
+```
+            {user && (
+                <form className="post__commentBox">
+                    <input
+                        className="post__input"
+                        type="text"
+                        placeholder="Add a comment..."
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
+                    />
+                    <button
+                        className="post__button"
+                        disabled={!comment}
+                        type="submit"
+                        onClick={postComment}
+                    >
+                        Post
+                    </button>
+                </form>
+            )}
+```
+
+a user logged in, there is a box for comment
+
+![logged in user](https://i.imgur.com/vzu4raD.png)
+
+If the user log out, the box will be disappeared
+
+![logged out](https://i.imgur.com/8KIVHZ5.png)
