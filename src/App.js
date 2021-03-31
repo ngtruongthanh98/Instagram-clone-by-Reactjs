@@ -5,10 +5,11 @@ import "./App.css";
 import Post from "./components/Post/Post";
 import { auth, db } from "./firebase";
 import ImageUpload from "./components/ImageUpload/ImageUpload";
+import InstagramEmbed from "react-instagram-embed";
 
 function getModalStyle() {
-    const top = 60;
-    const left = 1;
+    const top = 50;
+    const left = 37;
 
     return {
         top: `${top}%`,
@@ -194,21 +195,41 @@ function App() {
                 )}
             </div>
 
-            <h1>Let's build the Instagram clone</h1>
-
-            {posts.map(({ id, post }) => (
-                <Post
-                    key={id}
-                    username={post.username}
-                    caption={post.caption}
-                    imageURL={post.imageURL}
-                />
-            ))}
+            <div className="app__posts">
+                <div className="app__postsLeft">
+                    {posts.map(({ id, post }) => (
+                        <Post
+                            key={id}
+                            postId={id}
+                            user={user}
+                            username={post.username}
+                            caption={post.caption}
+                            imageURL={post.imageURL}
+                        />
+                    ))}{" "}
+                </div>
+                <div className="app_postsRight">
+                    <InstagramEmbed
+                        url="https://instagr.am/p/Zw9o4/"
+                        maxWidth={320}
+                        hideCaption={false}
+                        containerTagName="div"
+                        protocol=""
+                        injectScript
+                        onLoading={() => {}}
+                        onSuccess={() => {}}
+                        onAfterRender={() => {}}
+                        onFailure={() => {}}
+                    />
+                </div>
+            </div>
 
             {user?.displayName ? (
                 <ImageUpload username={user.displayName} />
             ) : (
-                <h3>Sorry you need to login to upload</h3>
+                <center>
+                    <h3>Sorry you need to login to upload</h3>
+                </center>
             )}
         </div>
     );

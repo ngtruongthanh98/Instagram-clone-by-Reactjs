@@ -1382,3 +1382,284 @@ In App.css
   object-fit: contain;
 }
 ```
+
+__________________________________
+Styling the app
+
+In App.js
+
+Move posts to className app__post
+
+```
+            <div className="app__posts">
+                {posts.map(({ id, post }) => (
+                    <Post
+                        key={id}
+                        username={post.username}
+                        caption={post.caption}
+                        imageURL={post.imageURL}
+                    />
+                ))}
+            </div>
+```
+
+App.css
+
+```
+.app__posts {
+  padding: 20px;
+}
+```
+
+We use instagram react embed
+
+`npm i react-instagram-embed`
+
+In App.js
+
+```import InstagramEmbed from "react-instagram-embed";```
+
+_____________________________________
+
+Add comment to Instagram post
+
+In Post.js:
+
+```
+function Post({username, caption, imageURL}) {
+    const [comments, setComments] = useState([]);
+
+```
+
+In App.js give id for each post:
+
+```
+            <div className="app__posts">
+                <div className="app__postsLeft">
+                    {posts.map(({ id, post }) => (
+                        <Post
+                            key={id}
+                            postId={id}
+```
+
+Setup in Firebase db:
+
+create collection comments
+
+![Firebase setting](https://i.imgur.com/mzh1aoH.png)
+
+![Firebase setting](https://i.imgur.com/YVbk89H.png)
+
+![Firebase setting](https://i.imgur.com/mQaCk0Q.png)
+
+![Firebase setting](https://i.imgur.com/ouLD4Zg.png)
+
+![Firebase setting](https://i.imgur.com/OJHLj7F.png)
+
+In Post.js
+
+```
+import React, { useState, useEffect } from "react";
+
+```
+
+```function Post({postId, username, caption, imageURL}) {``
+
+```
+    useEffect(() => {
+        let unsubscribe;
+
+        if (postId) {
+            unsubscribe = db
+                .collection("posts")
+                .doc(postId)
+                .collection("comments")
+                .onSnapshot((snapshot) => {
+                    setComments(snapshot.docs.map((doc) => doc.data()));
+                });
+        }
+        return () => {
+            unsubscribe();
+        };
+    }, [postId]);
+```
+
+Create a form for comment:
+
+```
+            <form>
+                <input
+                    className="post__input"
+                    type="text"
+                    placeholder="Add a comment..."
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                />
+            </form>
+```
+
+```
+    const [comments, setComments] = useState([]);
+    const [comment, setComment] = useState("");
+```
+![a comment](https://i.imgur.com/yj0Q5QC.png)
+
+```
+    const postComment = (event) => {
+        
+    }
+```
+
+```
+            <form>
+                <input
+                    className="post__input"
+                    type="text"
+                    placeholder="Add a comment..."
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                />
+                <button
+                    className="post__button"
+                    disabled={!comment}
+                    type="submit"
+                    onClick={postComment}
+                >
+                    Post
+                </button>
+            </form>
+```
+
+![comment](https://i.imgur.com/VBtNfSY.png)
+
+```
+            <form className="post__commentBox">
+```
+
+In Post.css
+
+```
+.post__input {
+    flex: 1;
+    border: none;
+    padding: 10px;
+    border-top: 1px solid lightgray;
+}
+
+.post__button {
+    flex: 0;
+    border: none;
+    color: #6082a3;
+    background-color: transparent;
+    border-top: 1px solid lightgray;
+}
+```
+
+![comment](https://i.imgur.com/2Hd4WpX.png)
+
+![comment](https://i.imgur.com/FoczqPO.png)
+
+In Post.js
+
+```
+            {/* username + caption */}
+            <h4 className="post__text">
+                <strong>{username} </strong>
+                {caption}
+            </h4>
+
+            {comments.map((comment) => (
+                <div className="post__comments">
+                    <p>
+                        <strong>{comment.username}</strong> {comment.text}
+                    </p>
+                </div>
+            ))}
+```
+
+Comment is working
+
+![comment](https://i.imgur.com/oYNCaM6.png)
+
+```
+.post__comments {
+    padding: 20px;
+}
+
+```
+
+![comment](https://i.imgur.com/F1hFGx7.png)
+
+Go to App.js, props user to user (user of a comment not user of the post)
+
+```
+            <div className="app__posts">
+                <div className="app__postsLeft">
+                    {posts.map(({ id, post }) => (
+                        <Post
+                            key={id}
+                            postId={id}
+                            user={user}
+```
+
+In Post.js
+
+```
+function Post({ postId, user, username, caption, imageURL }) {
+```
+
+```
+    const postComment = (event) => {
+        event.preventDefault();
+
+        db.collection("posts").doc(postId).collection("comments").add({
+            text: comment,
+            username: user.displayName
+        });
+        setComment("");
+    };
+```
+
+```
+import firebase from "firebase";
+
+```
+
+Add `.oderBy`
+
+```
+    useEffect(() => {
+        let unsubscribe;
+
+        if (postId) {
+            unsubscribe = db
+                .collection("posts")
+                .doc(postId)
+                .collection("comments")
+                .orderBy("timestamp", "desc")
+                .onSnapshot((snapshot) => {
+                    setComments(snapshot.docs.map((doc) => doc.data()));
+                });
+        }
+        return () => {
+            unsubscribe();
+        };
+    }, [postId]);
+```
+
+```
+    const postComment = (event) => {
+        event.preventDefault();
+
+        db.collection("posts").doc(postId).collection("comments").add({
+            text: comment,
+            username: user.displayName,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        setComment("");
+    };
+```
+
+Nơ you can post your comments:
+
+![test comment](https://i.imgur.com/pGiqONi.png)
