@@ -8,6 +8,10 @@ To install node_modules:
 To start the project:
 `npm start`
 
+## Demo link:
+
+`https://instagram-clone-reactjs-5ead8.web.app/`
+
 ---
 
 Create new app: `npx create-react-app instagram-clone-by-reactjs`
@@ -426,7 +430,7 @@ After that, we have a result:
 
 ________________________________________________
 
-Transfer data to a post component:
+## Transfer data to a post component:
 
 I change class component to functional component in Post.js. Because functional component can get data (username, caption, imageURL) from Props.
 
@@ -518,7 +522,7 @@ Create more posts:
 ```
 _________________________________________________
 
-In App.js, use useState
+## In App.js, use useState
 
 ```import React, {useState} from "react";```
 
@@ -561,7 +565,7 @@ We call those data to ```<Post/>```
 
 ______________________________________
 
-Create database in Firebase
+## Create database in Firebase
 
 ![Firebase](https://i.imgur.com/oDYhP3q.png)
 
@@ -637,7 +641,7 @@ const firebaseApp = firebase.initializeApp({
 Copy config from Firebase into it
 
 __________________________________________
-Go back to App.js
+## Go back to App.js
 
 We will use `useEffect`. "useEffect": run a piece of code based on a specific condition.
 
@@ -702,7 +706,7 @@ Add doc.id:
 ```
 ______________________________________
 
-Now we go to Authentication in Firebase
+## Now we go to Authentication in Firebase
 
 ![Auth](https://i.imgur.com/lM8dmf5.png)
 
@@ -1076,7 +1080,7 @@ Now we can sign in, sign up and logout
 
 _____________________________________
 
-I want to create an input field where user can post their image and caption.
+## I want to create an input field where user can post their image and caption.
 
 Create file `ImageUpload.js` in `src`
 
@@ -1282,7 +1286,7 @@ pass: 123456
 
 ________________________________
 
-Styling ImageUpload.css
+## Styling ImageUpload.css
 
 Create ImageUpload.css
 
@@ -1384,7 +1388,7 @@ In App.css
 ```
 
 __________________________________
-Styling the app
+## Styling the app
 
 In App.js
 
@@ -1421,7 +1425,7 @@ In App.js
 
 _____________________________________
 
-Add comment to Instagram post
+## Add comment to Instagram post
 
 In Post.js:
 
@@ -1660,13 +1664,13 @@ Add `.oderBy`
     };
 ```
 
-Nơ you can post your comments:
+Now you can post your comments:
 
 ![test comment](https://i.imgur.com/pGiqONi.png)
 
 ___________________________
 
-Change css app__header
+## Change css app__header
 
 ```
 .app__header {
@@ -1681,7 +1685,7 @@ Now the header is sticked to the top of page
 
 ______________________________________
 
-Only logged in user can comment:
+## Only logged in user can comment:
 
 ```
             {user && (
@@ -1712,3 +1716,27 @@ a user logged in, there is a box for comment
 If the user log out, the box will be disappeared
 
 ![logged out](https://i.imgur.com/8KIVHZ5.png)
+
+__________________________________
+
+## Deploy to Firebase
+
+1) `firebase login`
+
+2) `firebase init`
+
+2.1) Hosting → spacebar , enter
+
+2.2) Use existing project
+
+3) `build`
+
+4) Read and press y
+
+5) `npm run build` 
+
+6) `firebase deploy`
+
+
+
+
